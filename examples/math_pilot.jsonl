@@ -1,0 +1,6 @@
+{"id":"arith-001","question":"Compute 17 * 23.","answer":"391"}
+{"id":"arith-002","question":"Solve for x: 3x + 7 = 31.","answer":"8"}
+{"id":"arith-003","question":"What is the derivative of x^3 at x=2?","answer":"12"}
+{"id":"arith-004","question":"A rectangle has sides 9 and 4. What is its area?","answer":"36"}
+{"id":"arith-005","question":"Compute 1/2 + 1/3.","answer":"\\frac{5}{6}"}
+{"id":"arith-006","question":"Find the determinant of [[3,1],[2,4]].","answer":"10"}
