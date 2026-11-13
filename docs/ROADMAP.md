@@ -3,7 +3,7 @@
 | Milestone | Artifact | Status |
 |---|---|---|
 | P0 | Scientific protocol, task prompt, baseline/controls policy | Done, draft |
-| P1 | CPU seedable blind repair, patch validation, organizer grader, tests | Code complete, local tests passed |
+| P1 | CPU seedable blind repair, patch validation, organizer grader, tests | Code complete, local 7 tests passed |
 | P2 | Qwen3.5-0.8B GPU inference pilot, boxed math grading | Code written, GPU execution unverified |
 | P3 | Trusted isolated Agent runner and verified experiment budget | Planned |
 | P4 | Random/greedy/analytical baselines and 10/25/50 cost curves | Planned |
