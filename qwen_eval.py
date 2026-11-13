@@ -18,7 +18,7 @@ def digest(path: Path) -> str:
 
 def last_boxed(s: str) -> str | None:
     """Extract the last balanced LaTeX \boxed{...}, including nested braces."""
-    needle = "\boxed{"
+    needle = "\\boxed{"
     start = s.rfind(needle)
     if start < 0:
         return None
@@ -85,7 +85,7 @@ def main() -> None:
         raise SystemExit("Empty dataset")
     outputs = []
     for idx, row in enumerate(rows):
-        prompt = row["question"] + "\nPlease reason step by step, and put your final answer within \boxed{}."
+        prompt = row["question"] + "\nPlease reason step by step, and put your final answer within \\boxed{}."
         inputs = processor.apply_chat_template(
             [{"role": "user", "content": prompt}],
             add_generation_prompt=True, tokenize=True, return_dict=True,
