@@ -109,6 +109,8 @@ def evaluate(participant: Path, organizer: Path, patch: Path, output: Path | Non
     manifest = json.loads((organizer / "manifest.json").read_text(encoding="utf-8"))
     if sha256(participant / "model.npz") != manifest["checkpoint_sha256"]:
         raise ValueError("checkpoint differs from frozen organizer manifest")
+    if sha256(participant / "dev.jsonl") != manifest["dev_sha256"]:
+        raise ValueError("development set differs from frozen organizer manifest")
     student = load_model(participant / "model.npz")
     delta, changed, norm = read_patch(patch, student["w2"])
     with np.load(organizer / "hidden_test.npz", allow_pickle=False) as z:
