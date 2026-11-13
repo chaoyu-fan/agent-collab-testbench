@@ -1,50 +1,37 @@
-# WeightSpace Agent Lab
+# WeightSpace Agent Lab — v0.2 source-grounded redesign
 
-**Autonomous Weight-Space Repair & Research-Intelligence Benchmark**  
-Status: v0.1 (research prototype, 2026-11-13)
+**Research question:** Can an AI research agent discover, mathematically characterize and repair neural failure mechanisms more efficiently than brute-force search and strong non-LLM optimizers, given identical information and compute?
 
-目标：让 Coding Agent 在受控环境中诊断模型缺陷、自主提出并验证干预方案、直接修改权重；衡量最终效果，也衡量算法洞察相对于暴力试错的计算效率。
+Status (2026-11-13): source-audited design, CPU-side broker prototype, conditional LP baseline. **No real Qwen GPU experiment or verified Agent capability gain.** The original small NumPy classifier is now designated a plumbing smoke test ONLY.
 
-## Tracks
+## Read first
+- [MIT original audit and previous errors](methodology/RESEARCH_AUDIT.md)
+- [Controlled experiment matrix](methodology/EXPERIMENT_MATRIX.md)
+- [Honest implementation status](methodology/STATUS.md)
+- [MIT Experiment 8 logs](https://github.com/RikiyaT/lm_understand-logs/tree/main/exp8_math)
+- [Nathan Barry independent LP analysis](https://nathan.rs/posts/weight-space-lp/)
+- [Existing WSP-Bench](https://github.com/GPT-AGI/Weight-Space-Programing) — seeded Qwen repair is ALREADY being studied; do not claim it as novel.
 
-| Track | 任务 | 状态 |
-|---|---|---|
-| A: Blind Repair | CPU NumPy 神经网络隐藏故障修复（稀疏编辑） | 生成器、合法性检查、隐藏集评分和 7 项单元测试已在本地通过 |
-| B: Real WSP | Qwen/Qwen3.5-0.8B 数学任务权重编辑 | HF Transformers 评估脚本已经编写，但尚未 GPU 验证 |
+## Three distinct tracks
+1. **R — reproduction:** rebuild source-logged weight edit and pin exact vLLM think35 settings, model revision, grader and samples. This is not Agent discovery.
+2. **D — algorithmic insight:** identical initial observations for Agent and no-LLM pipelines, matched model-query and token/GPU budget, isolate diagnosis, localization, direction estimation, conditional optimizer choice, and validation. LP with privileged layers/direction is an ablation, not a fair end-to-end competitor.
+3. **G — unseen repair:** hidden fault mechanisms/architectures, behavior preservation, negative controls including no-edit, and held-out evaluation. Published original Qwen loop fix is an open-book demonstration, NOT eligible for blind-discovery ranking.
 
-## Quick start (CPU)
+## Actual code status
+
+Install numerical-method dependencies and run unit tests:
 
 ~~~bash
-python -m pip install -r requirements.txt
-python weightlab.py prepare --out runs/trial01
-python weightlab.py demo-patch --model runs/trial01/participant/model.npz --out runs/trial01/noop.npz
-python weightlab.py evaluate --participant runs/trial01/participant --organizer runs/trial01/organizer --patch runs/trial01/noop.npz --output runs/trial01/noop_result.json
+pip install -r requirements-methods.txt
 PYTHONPATH=. python -m unittest discover -s tests -v
 ~~~
 
-no-op 是管线验证，不是性能改进。正式盲测只能将 participant 文件夹交给 Agent；organizer 必须隔离到另一台主机或受控环境，且测试阶段只能在冻结提交后执行。CLI 可使用私有随机 seed；绝不能公开 organizer 的隐藏数据。
+The historical weightlab.py pipeline is a toy smoke test, not the main experiment. qwen_eval.py is an *unverified Transformers pilot* and is NOT equivalent to original vLLM sampling.
 
-## Agent instructions
+New: wsp_broker.py implements MIT-shaped batch/pass quotas and hash-chained audit records with mockable inference backend, for single-process validation only. New: baseline/lp_conditional.py implements the mathematical downstream LP requiring known behavior direction, relevant layers and labeled activations. Neither implements a live isolated Qwen run. Tests validate software components, not scientific claims.
 
-See [AGENT_PROMPT.md](AGENT_PROMPT.md) (CPU) and [QWEN_AGENT_PROMPT.md](QWEN_AGENT_PROMPT.md) (real-model research). The agent receives model.npz, dev.jsonl, rules.json and submits final_patch.npz with delta_w2. No gradient descent, no LoRA, no RL. At most 24 changed entries and norm <= 8.0; the organizer grades on a hidden test.
+## Findings must be stratified
 
-## Qwen pilot (GPU, optional)
+Report finish-with-box rate, accuracy conditional on finishing, total correctness, truncation/loop failures, tokens and GPU time, mechanism evidence, edit norm/size, general capability regression and paired confidence intervals. Pass count alone is not compute. Do not publish invented intelligence scores or compare differently sampled MATH-500 figures.
 
-~~~bash
-python -m pip install -r requirements-qwen.txt
-python qwen_eval.py --model Qwen/Qwen3.5-0.8B --dataset examples/math_pilot.jsonl --out outputs/base.json --max-new-tokens 2048
-# run an identical command with a separately saved, edited checkpoint
-python qwen_eval.py --model /path/to/edited-checkpoint --dataset examples/math_pilot.jsonl --out outputs/edited.json --max-new-tokens 2048
-~~~
-
-The six-example dataset is a plumbing test, NOT a benchmark. Current Qwen script has not been run on a GPU here. Its Transformers sampling is NOT identical to the MIT vLLM experiment, especially around the presence penalty and long generation budget; scores must never be compared across protocols.
-
-## Research questions and metrics
-
-Measure hidden-set accuracy improvement, completion/truncation, output tokens, wall/GPU time, verified forward/tool calls, changed-parameter count, generalization and falsifiable mechanism hypotheses. The key result is **accuracy-gain-vs-compute** under matched budgets (e.g. 10/25/50 passes), not just a peak score. Code-level CPU success does not establish an Agent IQ score. Read [docs/PROTOCOL.md](docs/PROTOCOL.md), [docs/ROADMAP.md](docs/ROADMAP.md), [docs/REFERENCES.md](docs/REFERENCES.md).
-
-## Isolation warning
-
-The local demo holds participant and organizer folders on one machine. That is not secure isolation. v0.1 does not cryptographically enforce the Agent's self-reported experiment count; the organizer must later implement a trusted gateway for formal leaderboard claims.
-
-License: MIT for original code and docs; external models/data retain their licenses.
+Project evolution: [Issue #1](https://github.com/chaoyu-fan/agent-collab-testbench/issues/1). Original code license MIT; cite MIT logs and Nathan Barry, preserving their independent licenses.
