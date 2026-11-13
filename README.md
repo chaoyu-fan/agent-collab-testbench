@@ -8,6 +8,7 @@ Status (2026-11-13): source-audited design, CPU-side broker prototype, condition
 - [MIT original audit and previous errors](methodology/RESEARCH_AUDIT.md)
 - [Controlled experiment matrix](methodology/EXPERIMENT_MATRIX.md)
 - [Honest implementation status](methodology/STATUS.md)
+- [New participant-facing blind Agent task](prompts/BLIND_AGENT_TASK.md) — designed to withhold mechanism clues; requires an independent runner
 - [MIT Experiment 8 logs](https://github.com/RikiyaT/lm_understand-logs/tree/main/exp8_math)
 - [Nathan Barry independent LP analysis](https://nathan.rs/posts/weight-space-lp/)
 - [Existing WSP-Bench](https://github.com/GPT-AGI/Weight-Space-Programing) — seeded Qwen repair is ALREADY being studied; do not claim it as novel.
