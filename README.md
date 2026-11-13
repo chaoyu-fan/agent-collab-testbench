@@ -9,7 +9,7 @@ Status: v0.1 (research prototype, 2026-11-13)
 
 | Track | 任务 | 状态 |
 |---|---|---|
-| A: Blind Repair | CPU NumPy 神经网络隐藏故障修复（稀疏编辑） | 生成器、合法性检查、隐藏集评分和 6 项单元测试已在本地通过 |
+| A: Blind Repair | CPU NumPy 神经网络隐藏故障修复（稀疏编辑） | 生成器、合法性检查、隐藏集评分和 7 项单元测试已在本地通过 |
 | B: Real WSP | Qwen/Qwen3.5-0.8B 数学任务权重编辑 | HF Transformers 评估脚本已经编写，但尚未 GPU 验证 |
 
 ## Quick start (CPU)
@@ -26,7 +26,7 @@ no-op 是管线验证，不是性能改进。正式盲测只能将 participant �
 
 ## Agent instructions
 
-See [AGENT_PROMPT.md](AGENT_PROMPT.md). The agent receives model.npz, dev.jsonl, rules.json and submits final_patch.npz with delta_w2. No gradient descent, no LoRA, no RL. At most 24 changed entries and norm <= 8.0; the organizer grades on a hidden test.
+See [AGENT_PROMPT.md](AGENT_PROMPT.md) (CPU) and [QWEN_AGENT_PROMPT.md](QWEN_AGENT_PROMPT.md) (real-model research). The agent receives model.npz, dev.jsonl, rules.json and submits final_patch.npz with delta_w2. No gradient descent, no LoRA, no RL. At most 24 changed entries and norm <= 8.0; the organizer grades on a hidden test.
 
 ## Qwen pilot (GPU, optional)
 
