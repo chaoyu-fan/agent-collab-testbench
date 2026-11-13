@@ -58,6 +58,14 @@ class TestBlindBenchmark(unittest.TestCase):
         with self.assertRaises(ValueError):
             evaluate(self.participant, self.organizer, patch)
 
+    def test_dev_tamper_rejected(self):
+        patch = self.root / "zero.npz"
+        demo_patch(self.participant / "model.npz", patch)
+        with (self.participant / "dev.jsonl").open("a", encoding="utf-8") as f:
+            f.write("\n")
+        with self.assertRaises(ValueError):
+            evaluate(self.participant, self.organizer, patch)
+
     def test_reproducibility(self):
         prepare(self.root / "again", seed=123)
         a = load_model(self.participant / "model.npz")
